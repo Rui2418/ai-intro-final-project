@@ -37,7 +37,8 @@ ai-intro-final-project/
 │  ├─ config.py              # 路径与字段配置
 │  ├─ preprocess.py          # 文本清洗
 │  ├─ train_baseline.py      # baseline 训练与验证
-│  ├─ predict.py             # 单条/批量预测
+│  ├─ train_bert.py          # BERT 分类器训练与验证
+│  ├─ predict.py             # baseline / BERT 预测
 │  └─ explain.py             # 判断依据生成
 ├─ models/                   # 训练得到的模型文件
 ├─ outputs/                  # 预测结果、实验指标、解释样例
@@ -75,12 +76,41 @@ python -m src.train_baseline
 - 将前 20 条解释样例保存到 `outputs/examples.csv`
 - 将指标保存到 `outputs/metrics.txt`
 
+## 训练 BERT 分类器
+
+```bash
+python -m src.train_bert
+```
+
+可选参数示例：
+
+```bash
+python -m src.train_bert --model-name distilbert-base-uncased --epochs 3 --batch-size 8 --max-length 256
+```
+
+如果机器不能访问 Hugging Face，可以把 `--model-name` 指向一个已经下载好的本地 Hugging Face 模型目录；该目录需要包含 `config.json`、tokenizer 文件和模型权重文件。
+
+运行后将：
+
+- 下载并微调一个英文预训练 Transformer 分类模型
+- 自动在有 CUDA 时使用显卡训练，没有则回退到 CPU
+- 将最佳模型保存到 `models/bert_classifier/`
+- 将验证集预测结果保存到 `outputs/bert_val_predictions.csv`
+- 将指标保存到 `outputs/bert_metrics.txt`
+
 ## 单条文本预测
 
 训练完成后运行：
 
 ```bash
 python main.py --text "Breaking news example text"
+```
+
+如果要显式指定模型：
+
+```bash
+python main.py --text "Breaking news example text" --model-type bert
+python main.py --text "Breaking news example text" --model-type baseline
 ```
 
 输出格式示例：
@@ -95,23 +125,25 @@ Reason: The text is classified as rumor because it contains rumor-related cues s
 训练完成后，也可以对 CSV 文件批量预测。输入文件需要包含 `text` 字段。
 
 ```bash
-python -m src.predict --input rumer2026/val.csv --output outputs/batch_predictions.csv
+python -m src.predict --input rumer2026/val.csv --output outputs/batch_predictions.csv --model-type bert
 ```
 
-## 当前最小可运行版本说明
+## 当前版本说明
 
-当前版本已经初步完成：
+当前仓库已经同时支持：
 
-- 成员 2 任务：数据读取、文本预处理、baseline 训练、验证集评估、预测结果保存
-- 成员 3 任务：基于规则的解释模块、单条解释输出、验证集解释样例保存
+- `TF-IDF + Logistic Regression` baseline
+- `BERT / DistilBERT` 风格预训练文本分类模型微调
+- 基于规则的解释模块输出
+- 模型对比、调参、交叉验证和错误分析脚本
 
-后续可以继续优化：
+## 后续可以继续优化
 
-1. 对比 SVM、Naive Bayes、BERT 等模型
-2. 调整文本预处理和 TF-IDF 参数
-3. 使用模型高权重词增强解释质量
-4. 接入学校提供的大语言模型接口生成更自然的解释
-5. 在报告中加入错误案例分析和典型案例展示
+1. 对比 `bert-base-uncased`、`roberta-base`、`microsoft/deberta-v3-base`
+2. 使用更稳的验证方案，比如按 `event` 分组验证
+3. 在解释模块中引入注意力词、关键词权重或大语言模型生成解释
+4. 增加 early stopping、warmup、weight decay 等训练策略
+5. 在报告中加入 baseline 与 BERT 的误差对比和典型案例分析
 
 ## 小组协作建议
 
