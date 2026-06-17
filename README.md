@@ -38,6 +38,8 @@ ai-intro-final-project/
 │  ├─ preprocess.py          # 文本清洗
 │  ├─ train_baseline.py      # baseline 训练与验证
 │  ├─ train_bert.py          # BERT 分类器训练与验证
+│  ├─ optimize_transformers.py # CUDA Transformer 调参实验
+│  ├─ build_best_cuda_ensemble.py # 最佳集成结果复现
 │  ├─ predict.py             # baseline / BERT 预测
 │  └─ explain.py             # 判断依据生成
 ├─ models/                   # 训练得到的模型文件
@@ -98,6 +100,34 @@ python -m src.train_bert --model-name distilbert-base-uncased --epochs 3 --batch
 - 将验证集预测结果保存到 `outputs/bert_val_predictions.csv`
 - 将指标保存到 `outputs/bert_metrics.txt`
 
+## 最佳验证集结果
+
+当前保留的最佳可复现方案是三模型多数投票集成，验证集结果为：
+
+```text
+Validation accuracy: 0.8978
+Validation F1: 0.8832
+```
+
+集成成员为：
+
+- `outputs/val_predictions_best_joint_all_models.csv`
+- `outputs/continue_best_lr5e6_ep2_val_predictions.csv`
+- `outputs/roberta_lr2e5_len256_ep4_seed123_val_predictions.csv`
+
+复现最终指标和预测文件：
+
+```bash
+python -m src.build_best_cuda_ensemble
+```
+
+运行后会生成：
+
+- `outputs/best_cuda_ensemble_metrics.txt`
+- `outputs/best_cuda_ensemble_val_predictions.csv`
+
+注意：脚本需要在项目根目录用 `python -m ...` 模块方式运行，不要直接用文件路径执行。
+
 ## 单条文本预测
 
 训练完成后运行：
@@ -133,7 +163,8 @@ python -m src.predict --input rumer2026/val.csv --output outputs/batch_predictio
 当前仓库已经同时支持：
 
 - `TF-IDF + Logistic Regression` baseline
-- `BERT / DistilBERT` 风格预训练文本分类模型微调
+- `BERT / RoBERTa` 风格预训练文本分类模型微调
+- 三模型多数投票集成，当前验证集最佳准确率为 `0.8978`
 - 基于规则的解释模块输出
 - 模型对比、调参、交叉验证和错误分析脚本
 

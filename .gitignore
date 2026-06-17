@@ -28,6 +28,11 @@ Thumbs.db
 # Data outputs and model artifacts
 outputs/*
 !outputs/.gitkeep
+!outputs/best_cuda_ensemble_metrics.txt
+!outputs/best_cuda_ensemble_val_predictions.csv
+!outputs/val_predictions_best_joint_all_models.csv
+!outputs/continue_best_lr5e6_ep2_val_predictions.csv
+!outputs/roberta_lr2e5_len256_ep4_seed123_val_predictions.csv
 models/*
 !models/.gitkeep
 *.pkl

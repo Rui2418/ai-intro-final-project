@@ -1,0 +1,14 @@
+Best CUDA validation ensemble
+Models: val_predictions_best_joint_all_models, continue_best_lr5e6_ep2, roberta_lr2e5_len256_ep4_seed123
+Validation accuracy: 0.8978
+Validation F1: 0.8832
+
+              precision    recall  f1-score   support
+
+           0     0.9111    0.9071    0.9091       226
+           1     0.8807    0.8857    0.8832       175
+
+    accuracy                         0.8978       401
+   macro avg     0.8959    0.8964    0.8961       401
+weighted avg     0.8978    0.8978    0.8978       401
+
