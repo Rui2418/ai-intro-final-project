@@ -76,6 +76,9 @@ def candidate_list() -> list[Candidate]:
         Candidate("continue_best_lr1e6_len256_ep2", str(BERT_MODEL_DIR), 2, 1e-6, 256, seed=42),
         Candidate("roberta_lr2e5_len256_ep4_seed7", "FacebookAI/roberta-base", 4, 2e-5, 256, seed=7),
         Candidate("roberta_lr2e5_len256_ep4_seed123", "FacebookAI/roberta-base", 4, 2e-5, 256, seed=123),
+        Candidate("roberta_lr2e5_len256_ep4_seed2024", "FacebookAI/roberta-base", 4, 2e-5, 256, seed=2024),
+        Candidate("roberta_lr15e6_len256_ep4_seed42", "FacebookAI/roberta-base", 4, 1.5e-5, 256, seed=42),
+        Candidate("roberta_lr25e6_len256_ep4_seed42", "FacebookAI/roberta-base", 4, 2.5e-5, 256, seed=42),
     ]
 
 

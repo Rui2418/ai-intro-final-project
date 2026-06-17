@@ -105,8 +105,8 @@ python -m src.train_bert --model-name distilbert-base-uncased --epochs 3 --batch
 当前保留的最佳可复现方案是三模型多数投票集成，验证集结果为：
 
 ```text
-Validation accuracy: 0.8978
-Validation F1: 0.8832
+Validation accuracy: 0.9027
+Validation F1: 0.8883
 ```
 
 集成成员为：
@@ -114,6 +114,9 @@ Validation F1: 0.8832
 - `outputs/val_predictions_best_joint_all_models.csv`
 - `outputs/continue_best_lr5e6_ep2_val_predictions.csv`
 - `outputs/roberta_lr2e5_len256_ep4_seed123_val_predictions.csv`
+- `outputs/roberta_lr2e5_len256_ep4_seed2024_val_predictions.csv`
+
+脚本会先构建前三个成员的基础集成，再与 `val_predictions_best_joint_all_models` 和 `roberta_lr2e5_len256_ep4_seed2024` 做最终多数投票。
 
 复现最终指标和预测文件：
 
@@ -164,7 +167,7 @@ python -m src.predict --input rumer2026/val.csv --output outputs/batch_predictio
 
 - `TF-IDF + Logistic Regression` baseline
 - `BERT / RoBERTa` 风格预训练文本分类模型微调
-- 三模型多数投票集成，当前验证集最佳准确率为 `0.8978`
+- 三模型/两层多数投票集成，当前验证集最佳准确率为 `0.9027`
 - 基于规则的解释模块输出
 - 模型对比、调参、交叉验证和错误分析脚本
 
