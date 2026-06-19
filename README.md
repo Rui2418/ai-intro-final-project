@@ -54,6 +54,8 @@ ai-intro-final-project/
 
 ## 环境安装
 
+实验环境使用 PyTorch 2.2.2+cu121，CUDA runtime 版本为 12.1，GPU 为 NVIDIA GeForce RTX 4060 Laptop GPU。系统 NVIDIA 驱动支持 CUDA 12.6，但训练实际使用的是 PyTorch 自带的 CUDA 12.1 runtime。
+
 建议使用 Python 3.10 及以上版本。
 
 安装依赖：
@@ -66,11 +68,11 @@ pip install -r requirements.txt
 
 本项目采用由浅入深的建模路线：
 
-1. 首先构建 `TF-IDF + Logistic Regression` baseline，用于验证数据读取、预处理、训练和预测流程，并作为后续模型的性能对照。
-2. 随后改用 BERT/RoBERTa 风格的预训练 Transformer 模型进行微调，利用上下文语义表示提升谣言检测性能。
-3. 最后结合传统模型和多个 RoBERTa 变体在验证集上的预测结果，构建多数投票集成，进一步提高验证集准确率和稳定性。
+1. 首先构建 `TF-IDF + Logistic Regression` baseline，用于验证数据读取、预处理、训练和预测流程，并作为后续模型的性能对照。baseline输出结果见 `outputs\metrics.txt`，最终精度为0.8429。![1781880609949](image/README/1781880609949.png)
+2. 随后改用 BERT/RoBERTa 风格的预训练 Transformer 模型进行微调，利用上下文语义表示提升谣言检测性能。BERT输出结果见 `outputs\bert_metrics.txt`，精度提升至0.8504。![1781880729042](image/README/1781880729042.png)
+3. 最后结合传统模型和多个 RoBERTa 变体在验证集上的预测结果，构建多数投票集成，进一步提高验证集准确率和稳定性。结果见 `outputs\best_cuda_ensemble_metrics.txt`，最终精度达0.9027，F1达0.8883。![1781880830956](image/README/1781880830956.png)
 
-因此，baseline 是对照实验和流程验证的一部分；最终提交的最高验证集结果来自 BERT/RoBERTa 系列模型与传统模型预测的集成方案。
+baseline 是对照实验和流程验证的一部分；最终提交的最高验证集结果来自 BERT/RoBERTa 系列模型与传统模型预测的集成方案。
 
 ## 训练 baseline
 
@@ -188,10 +190,3 @@ python -m src.predict --input rumer2026/val.csv --output outputs/batch_predictio
 3. 在解释模块中引入注意力词、关键词权重或大语言模型生成解释
 4. 增加 early stopping、warmup、weight decay 等训练策略
 5. 在报告中加入 baseline 与 BERT 的误差对比和典型案例分析
-
-## 小组协作建议
-
-- 组长负责仓库维护、系统整合、README 和报告统稿
-- 建模同学负责 baseline 和模型改进
-- 解释模块同学负责判断依据生成和案例整理
-- 每位成员都应直接提交代码或文档，保留清晰 commit 记录
