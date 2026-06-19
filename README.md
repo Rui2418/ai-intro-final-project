@@ -37,14 +37,20 @@ ai-intro-final-project/
 │  ├─ config.py              # 路径与字段配置
 │  ├─ preprocess.py          # 文本清洗
 │  ├─ train_baseline.py      # baseline 训练与验证
+│  ├─ train_compare.py       # 传统分类器对比
+│  ├─ tune_tfidf.py          # TF-IDF 参数调优
+│  ├─ tune_preprocess.py     # 预处理策略调优
+│  ├─ joint_search.py        # 预处理、特征和分类器联合搜索
+│  ├─ analyze_errors.py      # 错误样例分析
+│  ├─ cross_validate_best_model.py # 最佳传统模型交叉验证
 │  ├─ train_bert.py          # BERT 分类器训练与验证
 │  ├─ optimize_transformers.py # CUDA Transformer 调参实验
 │  ├─ build_best_cuda_ensemble.py # 最佳集成结果复现
 │  ├─ predict.py             # baseline / BERT 预测
 │  └─ explain.py             # 判断依据生成
-├─ models/                   # 训练得到的模型文件
+├─ models/                   # 可直接推理的 baseline 与 BERT 模型文件
 ├─ outputs/                  # 预测结果、实验指标、解释样例
-├─ notebooks/                # 数据分析与实验草稿
+├─ image/                    # README 中使用的结果截图
 ├─ report/                   # 报告和插图
 ├─ README.md
 ├─ requirements.txt
@@ -63,6 +69,25 @@ ai-intro-final-project/
 ```bash
 pip install -r requirements.txt
 ```
+
+本仓库保留了可直接推理所需的模型文件：
+
+- `models/baseline_pipeline.joblib`：baseline 推理模型
+- `models/bert_classifier/`：BERT 推理模型目录
+
+其中 `models/bert_classifier/model.safetensors` 文件较大，使用 Git LFS 管理。首次克隆仓库后，如果该文件没有自动下载，请在项目根目录运行：
+
+```bash
+git lfs pull
+```
+
+如果本地没有安装 Git LFS，需要先安装并初始化：
+
+```bash
+git lfs install
+```
+
+模型文件拉取完成后，无需重新训练即可直接运行单条文本预测和批量预测。
 
 ## 方法路线
 
@@ -102,7 +127,7 @@ python -m src.train_bert
 python -m src.train_bert --model-name distilbert-base-uncased --epochs 3 --batch-size 8 --max-length 256
 ```
 
-如果机器不能访问 Hugging Face，可以把 `--model-name` 指向一个已经下载好的本地 Hugging Face 模型目录；该目录需要包含 `config.json`、tokenizer 文件和模型权重文件。
+本仓库已经保留了 `models/bert_classifier/`，因此只做预测或复现当前结果时不需要访问 Hugging Face。只有在需要重新训练或替换预训练模型时，才需要下载 Hugging Face 模型；如果机器不能访问 Hugging Face，可以把 `--model-name` 指向一个已经下载好的本地 Hugging Face 模型目录，该目录需要包含 `config.json`、tokenizer 文件和模型权重文件。
 
 运行后将：
 
@@ -114,7 +139,7 @@ python -m src.train_bert --model-name distilbert-base-uncased --epochs 3 --batch
 
 ## 最终集成验证集结果
 
-当前保留的最佳可复现方案是三模型多数投票集成，验证集结果为：
+当前保留的最佳可复现方案是两层多数投票集成，验证集结果为：
 
 ```text
 Validation accuracy: 0.9027
@@ -141,7 +166,7 @@ python -m src.build_best_cuda_ensemble
 - `outputs/best_cuda_ensemble_metrics.txt`
 - `outputs/best_cuda_ensemble_val_predictions.csv`
 
-注意：脚本需要在项目根目录用 `python -m ...` 模块方式运行，不要直接用文件路径执行。
+**注意：脚本需要在项目根目录用 `python -m ...` 模块方式运行，不要直接用文件路径执行。**
 
 ## 单条文本预测
 
