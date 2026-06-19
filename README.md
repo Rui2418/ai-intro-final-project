@@ -62,6 +62,16 @@ ai-intro-final-project/
 pip install -r requirements.txt
 ```
 
+## 方法路线
+
+本项目采用由浅入深的建模路线：
+
+1. 首先构建 `TF-IDF + Logistic Regression` baseline，用于验证数据读取、预处理、训练和预测流程，并作为后续模型的性能对照。
+2. 随后改用 BERT/RoBERTa 风格的预训练 Transformer 模型进行微调，利用上下文语义表示提升谣言检测性能。
+3. 最后结合传统模型和多个 RoBERTa 变体在验证集上的预测结果，构建多数投票集成，进一步提高验证集准确率和稳定性。
+
+因此，baseline 是对照实验和流程验证的一部分；最终提交的最高验证集结果来自 BERT/RoBERTa 系列模型与传统模型预测的集成方案。
+
 ## 训练 baseline
 
 ```bash
@@ -100,7 +110,7 @@ python -m src.train_bert --model-name distilbert-base-uncased --epochs 3 --batch
 - 将验证集预测结果保存到 `outputs/bert_val_predictions.csv`
 - 将指标保存到 `outputs/bert_metrics.txt`
 
-## 最佳验证集结果
+## 最终集成验证集结果
 
 当前保留的最佳可复现方案是三模型多数投票集成，验证集结果为：
 
