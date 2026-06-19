@@ -38,8 +38,19 @@ outputs/*
 !outputs/roberta_lr2e5_len256_ep4_seed123_val_predictions.csv
 models/*
 !models/.gitkeep
+!models/baseline_pipeline.joblib
+!models/bert_classifier/
+!models/bert_classifier/config.json
+!models/bert_classifier/model.safetensors
+!models/bert_classifier/special_tokens_map.json
+!models/bert_classifier/tokenizer_config.json
+!models/bert_classifier/tokenizer.json
+!models/bert_classifier/vocab.txt
+models/**/checkpoint-*/
+models/**/checkpoints/
 *.pkl
 *.joblib
+!models/baseline_pipeline.joblib
 *.pt
 *.pth
 
