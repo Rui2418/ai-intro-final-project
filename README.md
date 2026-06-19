@@ -166,7 +166,7 @@ python -m src.build_best_cuda_ensemble
 - `outputs/best_cuda_ensemble_metrics.txt`
 - `outputs/best_cuda_ensemble_val_predictions.csv`
 
-**注意：脚本需要在项目根目录用 `python -m ...` 模块方式运行，不要直接用文件路径执行。**
+**注意：所有脚本需要在项目根目录用 `python -m ...` 模块方式运行，不要直接用文件路径执行。**
 
 ## 单条文本预测
 
