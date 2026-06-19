@@ -28,6 +28,8 @@ Thumbs.db
 # Data outputs and model artifacts
 outputs/*
 !outputs/.gitkeep
+!outputs/metrics.txt
+!outputs/bert_metrics.txt
 !outputs/best_cuda_ensemble_metrics.txt
 !outputs/best_cuda_ensemble_val_predictions.csv
 !outputs/val_predictions_best_joint_all_models.csv

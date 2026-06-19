@@ -1,0 +1,11 @@
+Validation accuracy: 0.8429
+
+              precision    recall  f1-score   support
+
+           0     0.8354    0.8982    0.8657       226
+           1     0.8544    0.7714    0.8108       175
+
+    accuracy                         0.8429       401
+   macro avg     0.8449    0.8348    0.8382       401
+weighted avg     0.8437    0.8429    0.8417       401
+
